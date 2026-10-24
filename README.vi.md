@@ -25,6 +25,17 @@ Khi Sage Clock chạy, toàn bộ màn hình 1440×1920 chỉ hiện:
 | --- | --- |
 | ![Đồng hồ kiểu ngang](docs/preview-ngang.svg) | ![Đồng hồ kiểu dọc](docs/preview-doc.svg) |
 
+## Hình ảnh
+
+![Sage Clock chạy trên Kobo Sage](docs/mockup-desk.png)
+
+Cứ 2 phút đồng hồ vẽ lại — giờ mới, câu thành ngữ tiếp theo:
+
+![Xoay vòng giờ và thành ngữ](docs/rotation.gif)
+
+Ảnh chụp màn hình độ phân giải đầy đủ (1440×1920, đúng như Sage hiển thị):
+[kiểu ngang](docs/preview-ngang.png) · [kiểu dọc](docs/preview-doc.png)
+
 ## Cài đặt nhanh
 
 > Hướng dẫn đầy đủ từng bước, có xử lý sự cố: **[INSTALL.md](INSTALL.md)**
@@ -135,8 +146,12 @@ kobo-sage-clock/
 ├─ CHANGELOG.md
 ├─ LICENSE                    ← MIT
 ├─ docs/
-│  ├─ preview-ngang.svg       ← ảnh xem trước kiểu ngang (1440×1920)
-│  └─ preview-doc.svg         ← ảnh xem trước kiểu dọc
+│  ├─ preview-ngang.svg       ← ảnh xem trước kiểu ngang (vector)
+│  ├─ preview-doc.svg         ← ảnh xem trước kiểu dọc (vector)
+│  ├─ preview-ngang.png       ← ảnh chụp đầy đủ kiểu ngang (1440×1920)
+│  ├─ preview-doc.png         ← ảnh chụp đầy đủ kiểu dọc
+│  ├─ mockup-desk.png         ← hình dựng máy trên bàn
+│  └─ rotation.gif             ← ảnh động: xoay vòng giờ + thành ngữ
 └─ sageclock.koplugin/        ← chép thư mục này vào .adds/koreader/plugins/
    ├─ _meta.lua               ← thông tin plugin (tên, phiên bản)
    └─ main.lua                ← toàn bộ plugin: bảng số pixel, widget, lịch vẽ

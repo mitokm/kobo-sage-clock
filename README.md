@@ -25,6 +25,18 @@ With Sage Clock running, the whole 1440×1920 screen shows:
 | --- | --- |
 | ![Clock, single line layout](docs/preview-ngang.svg) | ![Clock, stacked layout](docs/preview-doc.svg) |
 
+## Gallery
+
+![Sage Clock running on a Kobo Sage](docs/mockup-desk.png)
+
+Every 2 minutes the clock redraws — new time, next saying:
+
+![Time and saying rotation](docs/rotation.gif)
+
+Full-resolution screen captures (1440×1920, exactly as the Sage renders
+them): [single line](docs/preview-ngang.png) ·
+[stacked](docs/preview-doc.png)
+
 ## Quick install
 
 > Full step-by-step guide (Vietnamese, with troubleshooting):
@@ -141,8 +153,12 @@ kobo-sage-clock/
 ├─ CHANGELOG.md
 ├─ LICENSE                    ← MIT
 ├─ docs/
-│  ├─ preview-ngang.svg       ← single-line layout preview (1440×1920)
-│  └─ preview-doc.svg         ← stacked layout preview
+│  ├─ preview-ngang.svg       ← single-line layout preview (vector)
+│  ├─ preview-doc.svg         ← stacked layout preview (vector)
+│  ├─ preview-ngang.png       ← full-resolution capture, single line (1440×1920)
+│  ├─ preview-doc.png         ← full-resolution capture, stacked
+│  ├─ mockup-desk.png         ← device mockup
+│  └─ rotation.gif             ← animation: time + saying rotation
 └─ sageclock.koplugin/        ← copy this folder to .adds/koreader/plugins/
    ├─ _meta.lua               ← plugin metadata (name, version)
    └─ main.lua                ← the whole plugin: glyphs, widget, scheduler
