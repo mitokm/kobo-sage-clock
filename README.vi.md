@@ -199,10 +199,11 @@ Plugin là một file Lua duy nhất, tự chứa, không phụ thuộc gì ngo�
 
 ## Trạng thái & phiên bản
 
-- **Phiên bản 2.2.0** — thư viện câu hay mở rộng lên 80 câu Việt–Anh (xem
+- **Phiên bản 2.4.0** — thêm chỉnh cỡ chữ Nhỏ/Vừa/Lớn, nhịp nhảy giờ
+  1–10 phút, chạm 2 lần để thoát và tự cập nhật OTA ngay trong menu (xem
   [CHANGELOG.md](CHANGELOG.md)).
-- Đã kiểm tra cú pháp bằng LuaJIT 2.1; **chưa chạy thử dài hạn trên máy Sage
-  thật**. Rất hoan nghênh báo lỗi và kết quả chạy thử qua Issues.
+- Đã kiểm tra cú pháp Lua; **đã chạy thật trên máy Kobo Sage** từ bản
+  2.2.0. Rất hoan nghênh báo lỗi và kết quả chạy thử qua Issues.
 
 ## Giấy phép
 
