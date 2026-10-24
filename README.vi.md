@@ -123,6 +123,7 @@ từ **Menu → Công cụ → Sage Clock**:
 | Kiểu dọc: giờ trên, phút dưới | `sageclock_stacked` | tắt | Chuyển giữa kiểu ngang và kiểu dọc |
 | Hiện câu thành ngữ dưới đồng hồ | `sageclock_quote` | **bật** | Hiện/ẩn dòng thành ngữ xoay vòng |
 | Cỡ chữ (Nhỏ/Vừa/Lớn) | `sageclock_size` | Vừa | Phóng to/thu nhỏ cả số pixel lẫn dòng thành ngữ |
+| Nhịp nhảy giờ (phút) | `sageclock_interval` | 2 | Bao lâu thì giờ hiển thị nhảy một lần (1–10); càng thưa càng tiết kiệm pin/mực nhưng giờ hiển thị có thể chậm |
 
 Cả hai có hiệu lực từ lần mở đồng hồ tiếp theo.
 
