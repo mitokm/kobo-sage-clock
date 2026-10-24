@@ -3,7 +3,7 @@
 # Kobo Sage Clock
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)
 ![KOReader plugin](https://img.shields.io/badge/KOReader-plugin-orange.svg)
 ![Device](https://img.shields.io/badge/device-Kobo%20Sage-lightgrey.svg)
 
@@ -48,6 +48,7 @@ Cứ 2 phút đồng hồ vẽ lại — giờ mới, câu thành ngữ tiếp t
 
 Yêu cầu: Kobo Sage **đã cài sẵn [KOReader](https://koreader.rocks)**.
 Khi đồng hồ đang chạy, chạm hoặc vuốt vào màn hình để thoát về đọc sách.
+
 
 ## Hai kiểu hiển thị
 

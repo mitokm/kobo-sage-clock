@@ -3,7 +3,7 @@
 # Kobo Sage Clock
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)
 ![KOReader plugin](https://img.shields.io/badge/KOReader-plugin-orange.svg)
 ![Device](https://img.shields.io/badge/device-Kobo%20Sage-lightgrey.svg)
 
@@ -49,7 +49,8 @@ them): [single line](docs/preview-ngang.png) ·
    **Menu ☰ → Tools → Sage Clock → Show clock (tap to exit)**.
 
 Requires a Kobo Sage with **[KOReader](https://koreader.rocks) already
-installed**. Tap or swipe anywhere on the clock to exit back to your book.
+installed**. Double-tap (or swipe) on the clock to exit back to your book \u2014 a single accidental tap no longer closes it.
+
 
 ## The two layouts
 
@@ -126,6 +127,7 @@ are toggled from **Menu → Tools → Sage Clock**:
 | --- | --- | --- | --- |
 | Stacked: hour on top, minute below | `sageclock_stacked` | off | Switches between the single-line and stacked layouts |
 | Show a saying under the clock | `sageclock_quote` | **on** | Shows/hides the rotating saying line |
+| Display size (Small/Medium/Large) | `sageclock_size` | Medium | Scales both the pixel digits and the saying text |
 
 Both take effect the next time the clock is opened.
 

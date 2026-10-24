@@ -11,6 +11,8 @@ Chạm vào màn hình (hoặc vuốt) để thoát.
 --]]--
 
 local Blitbuffer = require("ffi/blitbuffer")
+local ffiutil = require("ffi/util")
+local InfoMessage = require("ui/widget/infomessage")
 local CenterContainer = require("ui/widget/container/centercontainer")
 local Device = require("device")
 local Font = require("ui/font")
@@ -194,14 +196,29 @@ end
 -- Widget đồng hồ toàn màn hình
 ----------------------------------------------------------------------
 
+-- Ba cỡ hiển thị, chỉnh trong menu của plugin (khóa sageclock_size).
+-- w: tỉ lệ bề ngang màn hình dùng cho hàng số; hfrac: tỉ lệ bề cao cho
+-- kiểu ngang; stacked_h: {có thành ngữ, không thành ngữ}; quote: cỡ chữ
+-- của dòng thành ngữ (trước scaleBySize).
+local SIZE_PROFILES = {
+    S = { w = 0.68, hfrac = 0.32, stacked_h = { 0.50, 0.62 }, quote = 17 },
+    M = { w = 0.80, hfrac = 0.40, stacked_h = { 0.60, 0.74 }, quote = 20 },
+    L = { w = 0.94, hfrac = 0.55, stacked_h = { 0.76, 0.90 }, quote = 27 },
+}
+
 local ClockWidget = InputContainer:extend{
     covers_fullscreen = true,
     stacked = false,
     show_quote = true,
+    size = "M",
     _last_text = nil,
     _changes = 0,
     _tick_scheduled = false,
 }
+
+function ClockWidget:sizeProfile()
+    return SIZE_PROFILES[self.size] or SIZE_PROFILES.M
+end
 
 function ClockWidget:init()
     self.dimen = Geom:new{
@@ -224,23 +241,24 @@ function ClockWidget:init()
     self:scheduleTick()
 end
 
--- Tính cỡ ô pixel: lấp gần kín màn hình theo cả hai chiều
+-- Tính cỡ ô pixel theo hồ sơ cỡ đã chọn (S/M/L), chừa lề thoáng bốn phía.
 function ClockWidget:pixelSize(stacked, sample)
+    local prof = self:sizeProfile()
     local w, h = Screen:getWidth(), Screen:getHeight()
     local cols = 0
     for i = 1, #sample do
         cols = cols + glyphWidth(sample:sub(i, i))
         if i < #sample then cols = cols + 1 end
     end
-    local pw = math.floor(w * 0.94 / cols)
+    local pw = math.floor(w * prof.w / cols)
     local ph
     if stacked then
         -- 2 dòng: 14 hàng pixel + khoảng cách ~1 hàng;
         -- chừa thêm chỗ cho dòng thành ngữ ở dưới nếu đang bật
-        ph = math.floor(h * (self.show_quote and 0.76 or 0.90) / 15)
+        ph = math.floor(h * (self.show_quote and prof.stacked_h[1] or prof.stacked_h[2]) / 15)
     else
         -- 1 dòng: cho ô cao tối đa gấp đôi ô ngang cho số trông cao, gọn
-        ph = math.min(math.floor(h * 0.55 / 7), pw * 2)
+        ph = math.min(math.floor(h * prof.hfrac / 7), pw * 2)
     end
     if ph < 1 then ph = 1 end
     return pw, ph
@@ -263,11 +281,11 @@ function ClockWidget:build(time_text)
         }
     end
     if self.show_quote then
-        parts[#parts + 1] = VerticalSpan:new{ width = Screen:scaleBySize(36) }
+        parts[#parts + 1] = VerticalSpan:new{ width = Screen:scaleBySize(30) }
         parts[#parts + 1] = TextBoxWidget:new{
             text = currentQuote(),
-            face = Font:getFace("cfont", Screen:scaleBySize(27)),
-            width = math.floor(Screen:getWidth() * 0.86),
+            face = Font:getFace("cfont", Screen:scaleBySize(self:sizeProfile().quote)),
+            width = math.floor(Screen:getWidth() * 0.82),
             alignment = "center",
         }
     end
@@ -299,8 +317,8 @@ function ClockWidget:scheduleTick()
         if now ~= self._last_text then
             self._changes = self._changes + 1
             self:build(now)
-            -- Mỗi 10 lần đổi (20 phút) làm mới toàn phần 1 lần để xóa bóng ma e-ink
-            local mode = (self._changes % 10 == 0) and "full" or "ui"
+            -- Mỗi 5 lần đổi (10 phút) làm mới toàn phần 1 lần để xóa bóng ma e-ink
+            local mode = (self._changes % 5 == 0) and "full" or "ui"
             UIManager:setDirty(self, mode)
         end
         self:scheduleTick()
@@ -329,8 +347,17 @@ function ClockWidget:onCloseWidget()
     pcall(function() UIManager:startAutoSuspend() end)
 end
 
+-- Thoát bằng CHẠM 2 LẦN liên tiếp (trong 0,6 giây): chạm 1 lần lỡ tay
+-- thì đồng hồ vẫn chạy, không bị thoát oan.
 function ClockWidget:onTapClose()
-    UIManager:close(self)
+    local ok, s, u = pcall(ffiutil.gettime)
+    local now = ok and (s + u / 1000000) or os.time()
+    if self._last_tap and (now - self._last_tap) <= 0.6 then
+        self._last_tap = nil
+        UIManager:close(self)
+    else
+        self._last_tap = now
+    end
     return true
 end
 
@@ -342,6 +369,34 @@ end
 function ClockWidget:onClose()
     UIManager:close(self)
     return true
+end
+
+----------------------------------------------------------------------
+-- Tự cập nhật (OTA): tải main.lua + _meta.lua mới nhất từ GitHub,
+-- không cần cắm máy tính. Cần Wi-Fi đang bật trên máy.
+----------------------------------------------------------------------
+
+local SAGECLOCK_VERSION = "2.3.0"
+local OTA_BASE = "https://raw.githubusercontent.com/mitokm/kobo-sage-clock/main/sageclock.koplugin/"
+
+local function pluginDir()
+    local src = debug.getinfo(1, "S").source or ""
+    return src:match("^@(.*/)") or "./"
+end
+
+local function httpGet(url)
+    local https = require("ssl.https")
+    local ltn12 = require("ltn12")
+    local chunks = {}
+    local res, code = https.request{
+        url = url,
+        sink = ltn12.sink.table(chunks),
+        headers = { ["User-Agent"] = "SageClock-OTA" },
+    }
+    if res and code == 200 then
+        return table.concat(chunks)
+    end
+    return nil, code
 end
 
 ----------------------------------------------------------------------
@@ -381,13 +436,61 @@ function SageClock:showQuote()
     return v == true
 end
 
+function SageClock:getSize()
+    local v = G_reader_settings:readSetting("sageclock_size")
+    if v == "S" or v == "M" or v == "L" then return v end
+    return "M"
+end
+
+function SageClock:checkForUpdate()
+    UIManager:show(InfoMessage:new{
+        text = _("Đang kiểm tra bản mới…"),
+        timeout = 2,
+    })
+    UIManager:scheduleIn(0.5, function()
+        local ok, err = pcall(function()
+            local meta = httpGet(OTA_BASE .. "_meta.lua")
+            if not meta then error("không tải được thông tin phiên bản") end
+            local remote = meta:match('version%s*=%s*"([%d%.]+)"')
+            if not remote then error("không đọc được phiên bản mới") end
+            if remote == SAGECLOCK_VERSION then
+                UIManager:show(InfoMessage:new{
+                    text = _("Đã là bản mới nhất (" .. SAGECLOCK_VERSION .. ")."),
+                })
+                return
+            end
+            local main = httpGet(OTA_BASE .. "main.lua")
+            if not main or #main < 5000 or not main:find("SageClock", 1, true) then
+                error("file tải về không hợp lệ")
+            end
+            local dir = pluginDir()
+            local f = io.open(dir .. "main.lua.new", "wb")
+            if not f then error("không ghi được file tạm") end
+            f:write(main)
+            f:close()
+            os.rename(dir .. "main.lua", dir .. "main.lua.bak")
+            os.rename(dir .. "main.lua.new", dir .. "main.lua")
+            local fm = io.open(dir .. "_meta.lua", "wb")
+            if fm then fm:write(meta) fm:close() end
+            UIManager:show(InfoMessage:new{
+                text = _("Đã cập nhật lên bản " .. remote .. ".\nHãy khởi động lại KOReader để dùng bản mới."),
+            })
+        end)
+        if not ok then
+            UIManager:show(InfoMessage:new{
+                text = _("Không cập nhật được. Kiểm tra Wi-Fi rồi thử lại.\n(" .. tostring(err) .. ")"),
+            })
+        end
+    end)
+end
+
 function SageClock:addToMainMenu(menu_items)
     menu_items.sageclock = {
         text = _("Sage Clock — đồng hồ"),
         sorting_hint = "more_tools",
         sub_item_table = {
             {
-                text = _("Hiện đồng hồ (chạm để thoát)"),
+                text = _("Hiện đồng hồ (chạm 2 lần để thoát)"),
                 callback = function()
                     self:showClock()
                 end,
@@ -410,6 +513,48 @@ function SageClock:addToMainMenu(menu_items)
                     G_reader_settings:saveSetting("sageclock_quote", not self:showQuote())
                 end,
             },
+            {
+                text = _("Cỡ chữ (số + thành ngữ)"),
+                sub_item_table = {
+                    {
+                        text = _("Nhỏ"),
+                        checked_func = function()
+                            return self:getSize() == "S"
+                        end,
+                        callback = function()
+                            G_reader_settings:saveSetting("sageclock_size", "S")
+                        end,
+                    },
+                    {
+                        text = _("Vừa"),
+                        checked_func = function()
+                            return self:getSize() == "M"
+                        end,
+                        callback = function()
+                            G_reader_settings:saveSetting("sageclock_size", "M")
+                        end,
+                    },
+                    {
+                        text = _("Lớn"),
+                        checked_func = function()
+                            return self:getSize() == "L"
+                        end,
+                        callback = function()
+                            G_reader_settings:saveSetting("sageclock_size", "L")
+                        end,
+                    },
+                },
+            },
+            {
+                text = _("Cập nhật bản mới (OTA, cần Wi-Fi)"),
+                callback = function()
+                    self:checkForUpdate()
+                end,
+            },
+            {
+                text = _("Phiên bản: " .. SAGECLOCK_VERSION),
+                callback = function() end,
+            },
         },
     }
 end
@@ -418,6 +563,7 @@ function SageClock:showClock()
     local widget = ClockWidget:new{
         stacked = self:isStacked(),
         show_quote = self:showQuote(),
+        size = self:getSize(),
     }
     UIManager:show(widget, "full")
 end

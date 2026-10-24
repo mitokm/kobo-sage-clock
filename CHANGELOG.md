@@ -2,6 +2,25 @@
 
 All notable changes to Sage Clock are documented here.
 
+## [2.3.0] \u2014 2026-10-24
+
+### Added
+- **Display size setting** in the plugin menu: Small / Medium / Large,
+  scaling both the pixel digits and the quote text (setting key
+  `sageclock_size`, default Medium). Medium is noticeably smaller than
+  the old fixed layout, with comfortable margins \u2014 feedback from the
+  first on-device test.
+- **OTA self-update**: a menu item downloads the latest `main.lua` /
+  `_meta.lua` from this repo over Wi-Fi and keeps a `.bak` backup \u2014
+  no PC needed for future updates.
+- Current version shown as a row in the plugin menu.
+
+### Changed
+- Exit is now a **double-tap** (two taps within 0.6 s), so an accidental
+  touch no longer closes the clock; swiping still exits.
+- Full e-ink refresh every 5 changes (10 minutes) instead of every 10,
+  for less ghosting.
+
 ## [2.2.0] — 2026-10-24
 
 ### Changed
