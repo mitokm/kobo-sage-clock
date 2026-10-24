@@ -3,7 +3,7 @@
 # Kobo Sage Clock
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)
 ![KOReader plugin](https://img.shields.io/badge/KOReader-plugin-orange.svg)
 ![Device](https://img.shields.io/badge/device-Kobo%20Sage-lightgrey.svg)
 
@@ -17,7 +17,7 @@ With Sage Clock running, the whole 1440×1920 screen shows:
 
 1. **The time — hours and minutes only** (`HH:MM`), in giant hand-drawn
    pixel digits you can read from across the room.
-2. **One rotating Vietnamese saying about time** underneath, in a small
+2. **One rotating saying about time** (Vietnamese and English) underneath, in a small
    regular font — a new one every refresh.
 3. **Nothing else.** No date, no seconds, no battery icon, no clutter.
 
@@ -62,24 +62,22 @@ Switch in **Menu → Tools → Sage Clock → Stacked: hour on top, minute below
 
 ## The rotating sayings
 
-Every refresh, the line under the clock advances to the next saying in this
-built-in list of Vietnamese proverbs and sayings about time:
+Every refresh, the line under the clock advances to the next saying from a
+built-in library of **80 quotes about time** — Vietnamese proverbs and folk
+sayings plus classic English aphorisms. A few favourites:
 
-| # | Saying | Rough meaning |
-| --- | --- | --- |
-| 1 | Thời gian là vàng bạc. | Time is gold and silver. |
-| 2 | Việc hôm nay chớ để ngày mai. | Never put off today's work until tomorrow. |
-| 3 | Chậm mà chắc. | Slow but sure. |
-| 4 | Có công mài sắt, có ngày nên kim. | Grind an iron bar long enough and it becomes a needle — persistence pays. |
-| 5 | Thì giờ thấm thoắt thoi đưa. | Time flies by like a weaver's shuttle. |
-| 6 | Thời gian như bóng câu qua cửa sổ. | Time is like a colt's shadow passing the window. |
-| 7 | Sông có khúc, người có lúc. | Rivers have bends, people have their moments. |
-| 8 | Mỗi phút giây là một khởi đầu mới. | Every minute is a new beginning. |
+- *Thời gian là vàng bạc.* — Time is gold and silver.
+- *Có công mài sắt, có ngày nên kim.* — Grind an iron bar long enough and it
+  becomes a needle; persistence pays.
+- *Thì giờ thấm thoắt thoi đưa.* — Time flies by like a weaver's shuttle.
+- *Don't count the days, make the days count. — Ali*
+- *Lost time is never found again. — Franklin*
+- *Carpe diem. — Horace*
 
 The rotation needs no state: the plugin picks
-`floor(unix_time / 120) mod 8`, so the saying changes exactly when the clock
-redraws, and any two devices running Sage Clock show the same saying at the
-same moment. Turn the line off in
+`floor(unix_time / 120) mod 80`, so the saying changes exactly when the clock
+redraws, a full cycle takes 160 minutes, and any two devices running Sage
+Clock show the same saying at the same moment. Turn the line off in
 **Menu → Tools → Sage Clock → Show a saying under the clock** if you want the
 bare clock back.
 
@@ -207,7 +205,7 @@ KOReader itself.
 
 ## Status & version
 
-- **Version 2.1.0** — rotating sayings added (see [CHANGELOG.md](CHANGELOG.md)).
+- **Version 2.2.0** — the saying library grows to 80 Vietnamese and English quotes (see [CHANGELOG.md](CHANGELOG.md)).
 - Syntax-checked with LuaJIT 2.1; **not yet long-term tested on real Sage
   hardware**. Test reports and bug reports via Issues are very welcome.
 

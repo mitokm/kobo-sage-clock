@@ -2,6 +2,13 @@
 
 All notable changes to Sage Clock are documented here.
 
+## [2.2.0] — 2026-10-24
+
+### Changed
+- The saying library grows from 8 to **80 quotes**: Vietnamese proverbs,
+  folk sayings and ca dao about time, plus classic English aphorisms
+  (Franklin, Gandhi, Ali, Horace…). A full rotation now takes 160 minutes.
+
 ## [2.1.0] — 2026-10-24
 
 ### Added

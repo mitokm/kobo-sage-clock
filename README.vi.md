@@ -3,7 +3,7 @@
 # Kobo Sage Clock
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-![Version](https://img.shields.io/badge/version-2.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.2.0-blue.svg)
 ![KOReader plugin](https://img.shields.io/badge/KOReader-plugin-orange.svg)
 ![Device](https://img.shields.io/badge/device-Kobo%20Sage-lightgrey.svg)
 
@@ -61,22 +61,20 @@ Khi đồng hồ đang chạy, chạm hoặc vuốt vào màn hình để thoát
 ## Dòng thành ngữ xoay vòng
 
 Mỗi nhịp cập nhật, dòng chữ dưới đồng hồ chuyển sang câu tiếp theo trong
-danh sách có sẵn:
+thư viện **80 câu có sẵn** — thành ngữ, tục ngữ, ca dao Việt Nam về thời
+gian cộng với các câu danh ngôn tiếng Anh kinh điển. Vài câu tiêu biểu:
 
-| # | Câu | Ghi chú |
-| --- | --- | --- |
-| 1 | Thời gian là vàng bạc. | |
-| 2 | Việc hôm nay chớ để ngày mai. | |
-| 3 | Chậm mà chắc. | |
-| 4 | Có công mài sắt, có ngày nên kim. | |
-| 5 | Thì giờ thấm thoắt thoi đưa. | Thơ ca dao về thời gian trôi nhanh |
-| 6 | Thời gian như bóng câu qua cửa sổ. | |
-| 7 | Sông có khúc, người có lúc. | |
-| 8 | Mỗi phút giây là một khởi đầu mới. | |
+- *Thời gian là vàng bạc.*
+- *Có công mài sắt, có ngày nên kim.*
+- *Thì giờ thấm thoắt thoi đưa.*
+- *Don't count the days, make the days count. — Ali*
+- *Lost time is never found again. — Franklin*
+- *Carpe diem. — Horace*
 
 Cách xoay không cần lưu trạng thái: plugin chọn câu theo
-`floor(thời_gian_unix / 120) mod 8`, nên câu đổi đúng lúc đồng hồ vẽ lại, và
-hai máy chạy Sage Clock cùng lúc sẽ hiện cùng một câu. Muốn tắt dòng này:
+`floor(thời_gian_unix / 120) mod 80`, nên câu đổi đúng lúc đồng hồ vẽ lại,
+một vòng đủ 80 câu kéo dài 160 phút, và hai máy chạy Sage Clock cùng lúc sẽ
+hiện cùng một câu. Muốn tắt dòng này:
 **Menu → Công cụ → Sage Clock → Hiện câu thành ngữ dưới đồng hồ**.
 
 ## Cách hoạt động
@@ -198,7 +196,7 @@ Plugin là một file Lua duy nhất, tự chứa, không phụ thuộc gì ngo�
 
 ## Trạng thái & phiên bản
 
-- **Phiên bản 2.1.0** — thêm dòng thành ngữ xoay vòng (xem
+- **Phiên bản 2.2.0** — thư viện câu hay mở rộng lên 80 câu Việt–Anh (xem
   [CHANGELOG.md](CHANGELOG.md)).
 - Đã kiểm tra cú pháp bằng LuaJIT 2.1; **chưa chạy thử dài hạn trên máy Sage
   thật**. Rất hoan nghênh báo lỗi và kết quả chạy thử qua Issues.
