@@ -118,8 +118,8 @@ local QUOTES = {
     "Make each day your masterpiece. — Wooden",
 }
 
-local function currentQuote()
-    local idx = (math.floor(os.time() / 120) % #QUOTES) + 1
+local function currentQuote(period_sec)
+    local idx = (math.floor(os.time() / (period_sec or 120)) % #QUOTES) + 1
     return QUOTES[idx]
 end
 
@@ -211,6 +211,7 @@ local ClockWidget = InputContainer:extend{
     stacked = false,
     show_quote = true,
     size = "M",
+    interval_min = 2,
     _last_text = nil,
     _changes = 0,
     _tick_scheduled = false,
@@ -218,6 +219,14 @@ local ClockWidget = InputContainer:extend{
 
 function ClockWidget:sizeProfile()
     return SIZE_PROFILES[self.size] or SIZE_PROFILES.M
+end
+
+-- Chu kỳ nhảy giờ tính bằng giây (khóa sageclock_interval, 1..10 phút).
+function ClockWidget:periodSec()
+    local m = self.interval_min or 2
+    if m < 1 then m = 1 end
+    if m > 10 then m = 10 end
+    return m * 60
 end
 
 function ClockWidget:init()
@@ -283,7 +292,7 @@ function ClockWidget:build(time_text)
     if self.show_quote then
         parts[#parts + 1] = VerticalSpan:new{ width = Screen:scaleBySize(30) }
         parts[#parts + 1] = TextBoxWidget:new{
-            text = currentQuote(),
+            text = currentQuote(self:periodSec()),
             face = Font:getFace("cfont", Screen:scaleBySize(self:sizeProfile().quote)),
             width = math.floor(Screen:getWidth() * 0.82),
             alignment = "center",
@@ -306,7 +315,8 @@ function ClockWidget:build(time_text)
     }
 end
 
--- Hẹn giờ tới MỐC 2 PHÚT tiếp theo (phút chẵn) rồi mới vẽ lại.
+-- Hẹn giờ tới MỐC chu kỳ tiếp theo (chu kỳ do người dùng chọn, 1..10
+-- phút, căn theo đồng hồ hệ thống) rồi mới vẽ lại.
 -- Cộng thêm 1 giây đệm để chắc chắn đồng hồ hệ thống đã sang phút mới.
 function ClockWidget:scheduleTick()
     if self._tick_scheduled then return end
@@ -317,14 +327,15 @@ function ClockWidget:scheduleTick()
         if now ~= self._last_text then
             self._changes = self._changes + 1
             self:build(now)
-            -- Mỗi 5 lần đổi (10 phút) làm mới toàn phần 1 lần để xóa bóng ma e-ink
+            -- Mỗi 5 lần nhảy làm mới toàn phần 1 lần để xóa bóng ma e-ink
             local mode = (self._changes % 5 == 0) and "full" or "ui"
             UIManager:setDirty(self, mode)
         end
         self:scheduleTick()
     end
+    local period = self:periodSec()
     local now_s = os.time()
-    local delay = 120 - (now_s % 120) + 1
+    local delay = period - (now_s % period) + 1
     self._tick_scheduled = true
     UIManager:scheduleIn(delay, self._tick)
 end
@@ -376,7 +387,7 @@ end
 -- không cần cắm máy tính. Cần Wi-Fi đang bật trên máy.
 ----------------------------------------------------------------------
 
-local SAGECLOCK_VERSION = "2.3.0"
+local SAGECLOCK_VERSION = "2.4.0"
 local OTA_BASE = "https://raw.githubusercontent.com/mitokm/kobo-sage-clock/main/sageclock.koplugin/"
 
 local function pluginDir()
@@ -442,6 +453,13 @@ function SageClock:getSize()
     return "M"
 end
 
+-- Nhịp nhảy giờ: số phút giữa hai lần cập nhật hiển thị (1..10, mặc định 2).
+function SageClock:getInterval()
+    local v = tonumber(G_reader_settings:readSetting("sageclock_interval"))
+    if v and v >= 1 and v <= 10 then return math.floor(v) end
+    return 2
+end
+
 function SageClock:checkForUpdate()
     UIManager:show(InfoMessage:new{
         text = _("Đang kiểm tra bản mới…"),
@@ -485,6 +503,20 @@ function SageClock:checkForUpdate()
 end
 
 function SageClock:addToMainMenu(menu_items)
+    -- Menu con chọn nhịp nhảy giờ 1..10 phút
+    local interval_items = {}
+    for m = 1, 10 do
+        local minutes = m
+        interval_items[#interval_items + 1] = {
+            text = minutes .. _(" phút"),
+            checked_func = function()
+                return self:getInterval() == minutes
+            end,
+            callback = function()
+                G_reader_settings:saveSetting("sageclock_interval", minutes)
+            end,
+        }
+    end
     menu_items.sageclock = {
         text = _("Sage Clock — đồng hồ"),
         sorting_hint = "more_tools",
@@ -546,6 +578,10 @@ function SageClock:addToMainMenu(menu_items)
                 },
             },
             {
+                text = _("Nhịp nhảy giờ"),
+                sub_item_table = interval_items,
+            },
+            {
                 text = _("Cập nhật bản mới (OTA, cần Wi-Fi)"),
                 callback = function()
                     self:checkForUpdate()
@@ -564,6 +600,7 @@ function SageClock:showClock()
         stacked = self:isStacked(),
         show_quote = self:showQuote(),
         size = self:getSize(),
+        interval_min = self:getInterval(),
     }
     UIManager:show(widget, "full")
 end

@@ -3,7 +3,7 @@
 # Kobo Sage Clock
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.4.0-blue.svg)
 ![KOReader plugin](https://img.shields.io/badge/KOReader-plugin-orange.svg)
 ![Device](https://img.shields.io/badge/device-Kobo%20Sage-lightgrey.svg)
 
@@ -128,6 +128,7 @@ are toggled from **Menu → Tools → Sage Clock**:
 | Stacked: hour on top, minute below | `sageclock_stacked` | off | Switches between the single-line and stacked layouts |
 | Show a saying under the clock | `sageclock_quote` | **on** | Shows/hides the rotating saying line |
 | Display size (Small/Medium/Large) | `sageclock_size` | Medium | Scales both the pixel digits and the saying text |
+| Refresh interval in minutes | `sageclock_interval` | 2 | How often the displayed time steps (1\u201310); longer = less battery and e-ink wear, but the shown time can lag |
 
 Both take effect the next time the clock is opened.
 

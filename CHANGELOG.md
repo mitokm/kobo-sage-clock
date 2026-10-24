@@ -2,6 +2,16 @@
 
 All notable changes to Sage Clock are documented here.
 
+## [2.4.0] \u2014 2026-10-24
+
+### Added
+- **Adjustable refresh interval**: a "Nh\u1ecbp nh\u1ea3y gi\u1edd" (time step)
+  submenu in the plugin menu, 1\u201310 minutes between display updates
+  (setting key `sageclock_interval`, default 2). Longer intervals save
+  battery and e-ink wear; the saying line rotates with the same rhythm.
+  Note: the displayed time can lag real time by up to interval\u22121
+  minutes \u2014 that is the trade-off of a slow-refresh desk clock.
+
 ## [2.3.0] \u2014 2026-10-24
 
 ### Added

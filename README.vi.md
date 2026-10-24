@@ -3,7 +3,7 @@
 # Kobo Sage Clock
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-![Version](https://img.shields.io/badge/version-2.3.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.4.0-blue.svg)
 ![KOReader plugin](https://img.shields.io/badge/KOReader-plugin-orange.svg)
 ![Device](https://img.shields.io/badge/device-Kobo%20Sage-lightgrey.svg)
 
