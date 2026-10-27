@@ -2,6 +2,14 @@
 
 All notable changes to Sage Clock are documented here.
 
+## [2.4.1] \u2014 2026-10-27
+
+### Added
+- **194 new sayings** from a curated collection of 200 Vietnamese
+  ca dao / proverbs and world proverbs (6 were already in the
+  library). The library now holds **274 sayings**, so at the default
+  2-minute rhythm a full rotation takes about 9 hours.
+
 ## [2.4.0] \u2014 2026-10-24
 
 ### Added

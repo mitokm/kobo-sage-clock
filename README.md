@@ -3,7 +3,7 @@
 # Kobo Sage Clock
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-![Version](https://img.shields.io/badge/version-2.4.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.4.1-blue.svg)
 ![KOReader plugin](https://img.shields.io/badge/KOReader-plugin-orange.svg)
 ![Device](https://img.shields.io/badge/device-Kobo%20Sage-lightgrey.svg)
 
@@ -64,8 +64,8 @@ Switch in **Menu → Tools → Sage Clock → Stacked: hour on top, minute below
 ## The rotating sayings
 
 Every refresh, the line under the clock advances to the next saying from a
-built-in library of **80 quotes about time** — Vietnamese proverbs and folk
-sayings plus classic English aphorisms. A few favourites:
+built-in library of **274 sayings** — Vietnamese ca dao, proverbs and folk
+wisdom, world proverbs in Vietnamese, plus classic English aphorisms. A few favourites:
 
 - *Thời gian là vàng bạc.* — Time is gold and silver.
 - *Có công mài sắt, có ngày nên kim.* — Grind an iron bar long enough and it
@@ -76,8 +76,8 @@ sayings plus classic English aphorisms. A few favourites:
 - *Carpe diem. — Horace*
 
 The rotation needs no state: the plugin picks
-`floor(unix_time / 120) mod 80`, so the saying changes exactly when the clock
-redraws, a full cycle takes 160 minutes, and any two devices running Sage
+`floor(unix_time / 120) mod 274`, so the saying changes exactly when the clock
+redraws, a full cycle takes 548 minutes (about 9 hours), and any two devices running Sage
 Clock show the same saying at the same moment. Turn the line off in
 **Menu → Tools → Sage Clock → Show a saying under the clock** if you want the
 bare clock back.

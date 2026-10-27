@@ -3,7 +3,7 @@
 # Kobo Sage Clock
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
-![Version](https://img.shields.io/badge/version-2.4.0-blue.svg)
+![Version](https://img.shields.io/badge/version-2.4.1-blue.svg)
 ![KOReader plugin](https://img.shields.io/badge/KOReader-plugin-orange.svg)
 ![Device](https://img.shields.io/badge/device-Kobo%20Sage-lightgrey.svg)
 
@@ -62,8 +62,9 @@ Khi đồng hồ đang chạy, chạm hoặc vuốt vào màn hình để thoát
 ## Dòng thành ngữ xoay vòng
 
 Mỗi nhịp cập nhật, dòng chữ dưới đồng hồ chuyển sang câu tiếp theo trong
-thư viện **80 câu có sẵn** — thành ngữ, tục ngữ, ca dao Việt Nam về thời
-gian cộng với các câu danh ngôn tiếng Anh kinh điển. Vài câu tiêu biểu:
+thư viện **274 câu có sẵn** — ca dao, tục ngữ, thành ngữ Việt Nam, ngạn
+ngữ thế giới dịch sang tiếng Việt, cộng với các câu danh ngôn tiếng Anh
+kinh điển. Vài câu tiêu biểu:
 
 - *Thời gian là vàng bạc.*
 - *Có công mài sắt, có ngày nên kim.*
@@ -73,8 +74,8 @@ gian cộng với các câu danh ngôn tiếng Anh kinh điển. Vài câu tiêu
 - *Carpe diem. — Horace*
 
 Cách xoay không cần lưu trạng thái: plugin chọn câu theo
-`floor(thời_gian_unix / 120) mod 80`, nên câu đổi đúng lúc đồng hồ vẽ lại,
-một vòng đủ 80 câu kéo dài 160 phút, và hai máy chạy Sage Clock cùng lúc sẽ
+`floor(thời_gian_unix / 120) mod 274`, nên câu đổi đúng lúc đồng hồ vẽ lại,
+một vòng đủ 274 câu kéo dài 548 phút (hơn 9 giờ), và hai máy chạy Sage Clock cùng lúc sẽ
 hiện cùng một câu. Muốn tắt dòng này:
 **Menu → Công cụ → Sage Clock → Hiện câu thành ngữ dưới đồng hồ**.
 
